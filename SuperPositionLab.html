@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SuperpositionLAB – Interactive Superposition Theorem Simulator</title>
+<style>
+:root{--bg:#000;--panel:#0d0d0d;--line:#262626;--text:#ececec;--mute:#9a9a9a;--red:#ef4444;--green:#22c55e;--yel:#facc15;--blue:#3b82f6;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+*,*:before,*:after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 "Segoe UI",system-ui,sans-serif}
+a{color:inherit}
+nav{position:sticky;top:0;z-index:5;display:flex;gap:20px;align-items:center;flex-wrap:wrap;padding:12px 20px;background:rgba(0,0,0,.92);border-bottom:1px solid var(--line)}
+nav b{margin-right:auto;font-size:1.05rem}
+nav b span{color:var(--yel)}
+nav a{text-decoration:none;color:var(--mute);font-size:.95rem}
+nav a:hover,nav a:focus-visible{color:var(--text)}
+section{max-width:1040px;margin:0 auto;padding:56px 20px}
+h1{font-size:clamp(2rem,6vw,3.6rem);line-height:1.1;margin:.3em 0}
+h2{font-size:1.8rem;margin:0 0 .4em}
+h3{font-size:1.1rem;margin:1.4em 0 .3em}
+p{max-width:68ch}
+.mute{color:var(--mute)}
+.btn{display:inline-block;padding:12px 22px;background:var(--yel);color:#000;font-weight:700;border-radius:6px;text-decoration:none;margin-top:10px}
+.btn:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.tags{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+.tags span{border:1px solid var(--line);border-radius:99px;padding:4px 14px;font-size:.88rem;color:var(--mute)}
+.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:18px}
+.dot{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:8px}
+.res{font-family:Consolas,monospace;font-size:1.05rem;color:var(--yel)}
+.presets{display:flex;gap:10px;flex-wrap:wrap}
+button{font:inherit;cursor:pointer;background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:6px;padding:8px 14px}
+button:hover{border-color:var(--yel)}
+.inputs{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));margin:18px 0 6px}
+label{display:flex;flex-direction:column;font-size:.85rem;color:var(--mute);gap:4px}
+input{font:inherit;background:#000;color:var(--text);border:1px solid #3a3a3a;border-radius:6px;padding:8px}
+.circuits{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));margin-top:22px}
+.circuits svg{width:100%;height:auto;background:#000;border-radius:6px}
+.circuits .res,.circuits p{margin:.3em 0}
+.sum{margin-top:18px;border-color:var(--yel)}
+.sum .res{font-size:1.25rem}
+details{background:var(--panel);border:1px solid var(--line);border-radius:8px;margin:10px 0;padding:12px 16px}
+summary{cursor:pointer;font-weight:600}
+details p{margin:.6em 0 0}
+.eq{font-family:Consolas,monospace;color:var(--yel);margin:.3em 0}
+.eq b{color:var(--red)}
+footer{text-align:center;padding:30px 20px;border-top:1px solid var(--line);color:var(--mute);font-size:.9rem}
+#home{background:radial-gradient(ellipse at 70% 0%,rgba(250,204,21,.14),transparent 60%)}
+#home h1{background:linear-gradient(90deg,var(--yel),var(--green) 60%,var(--blue));-webkit-background-clip:text;background-clip:text;color:transparent}
+.btn{transition:transform .15s,box-shadow .15s}.btn:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(250,204,21,.3)}
+.card{transition:border-color .2s}.card:hover{border-color:#444}
+nav a.on{color:var(--yel)}
+.tool{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}
+button.p{background:var(--yel);color:#000;font-weight:700;border-color:var(--yel)}
+input[type=range]{padding:0;accent-color:var(--yel)}
+.flow{stroke:#fff;stroke-width:3;stroke-linecap:round;stroke-dasharray:2 10;fill:none;animation:mv 1s linear infinite;opacity:.9}
+.flow.r{animation-direction:reverse}
+@keyframes mv{to{stroke-dashoffset:-24}}
+.noflow .flow{display:none}
+.bar{display:grid;grid-template-columns:40px 1fr 90px;gap:10px;align-items:center;margin:8px 0}
+.bar i{height:14px;border-radius:7px;display:block;min-width:2px;transition:width .3s}
+.bar em{font-style:normal;font-family:Consolas,monospace;color:var(--mute);text-align:right}
+.hide{opacity:.12;transform:scale(.98)}
+.circuits .card,.sum,#bars{transition:opacity .5s,transform .5s}
+#bars{margin-top:18px}
+#status{color:var(--yel);min-height:1.6em}
+.q{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:12px}
+.q input{width:160px}
+.ok{color:var(--green)}.bad{color:var(--red)}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.flow{animation:none}}
+</style>
+</head>
+<body>
+<nav aria-label="Main">
+<b><span>⚡</span> SuperpositionLAB</b>
+<a href="#home">Home</a><a href="#superposition">Superposition Theorem</a><a href="#sim">Simulator</a><a href="#learning">Learning Mode</a><a href="#quiz">Quiz</a>
+</nav>
+
+<section id="home">
+<p class="mute">DC Network Simulation and Analysis</p>
+<h1>Interactive Superposition Theorem Simulator</h1>
+<p>Enter your source and resistor values, then watch the circuit split into one-source-at-a-time circuits and add back up to the real answer.</p>
+<a class="btn" href="#sim">Launch Superposition Simulator</a>
+<div class="tags"><span>Exact nodal-analysis cross-check</span><span>6 ready circuit presets</span><span>Reference problem: IL = 1.923 A verified</span></div>
+</section>
+
+<section id="superposition">
+<h2>Superposition Theorem</h2>
+<p>Find the response of a linear network with several independent sources by working with one source at a time.</p>
+<p>In a linear bilateral network with more than one independent source, the current through or voltage across any element equals the algebraic sum of the values each source produces alone.</p>
+<ul>
+<li>Keep one source, replace each other voltage source with a short circuit</li>
+<li>Replace each other current source with an open circuit</li>
+<li>Add the partial currents with their signs: IL = IL′ + IL″</li>
+</ul>
+<div class="grid">
+<div class="card">
+<h3 style="margin-top:0">Colour guide</h3>
+<p class="mute">Every part keeps one colour across the whole site.</p>
+<p><span class="dot" style="background:var(--red)"></span><b>Red</b> – resistors R1 and R2</p>
+<p><span class="dot" style="background:var(--green)"></span><b>Green</b> – the load resistor RL</p>
+<p><span class="dot" style="background:var(--yel)"></span><span class="dot" style="background:var(--blue)"></span><b>Yellow</b> and <b>blue</b> – voltage sources (long plate yellow, short plate blue)</p>
+<p class="mute">Black background for contrast</p>
+<a class="btn" href="#learning">Open Learning Mode</a>
+</div>
+<div class="card">
+<h3 style="margin-top:0">Verified benchmark</h3>
+<p>V1 = 10 V and V2 = 5 V feed node A through R1 = 2 Ω and R2 = 4 Ω. The load RL = 3 Ω sits from A to ground.</p>
+<p class="res">IL′ = 1.538 A<br>IL″ = 0.385 A<br>IL = 1.923 A (exact)</p>
+</div>
+</div>
+<h3>Six ready circuit presets</h3>
+<p class="mute">Click one to load it into the simulator.</p>
+<div class="presets" id="presets"></div>
+</section>
+
+<section id="sim">
+<h2>Superposition Theorem Simulator</h2>
+<p class="mute">Change any value. The three circuits and every step update instantly.</p>
+<div class="inputs">
+<label>V1 (V)<input id="v1" type="number" step="any" value="10"></label>
+<label>V2 (V)<input id="v2" type="number" step="any" value="5"></label>
+<label>R1 (Ω)<input id="r1" type="number" step="any" min="0.001" value="2"></label>
+<label>R2 (Ω)<input id="r2" type="number" step="any" min="0.001" value="4"></label>
+<label>Load RL (Ω)<input id="rl" type="number" step="any" min="0.001" value="3"></label>
+</div>
+<p class="mute">Use a negative voltage to reverse a source. White dots show the direction and size of each current.</p>
+<div class="tool"><button class="p" id="play">Play walkthrough</button><button id="rnd">Randomize</button><button id="rst">Reset</button><button id="flw">Hide current flow</button><button id="cpy">Copy results</button></div>
+<p id="status" aria-live="polite"></p>
+<div class="circuits">
+<div class="card"><h3 style="margin-top:0">Original circuit – both sources active</h3><div id="c0"></div><div id="t0"></div></div>
+<div class="card"><h3 style="margin-top:0">Case 1 – V1 only (V2 shorted)</h3><div id="c1"></div><div id="t1"></div></div>
+<div class="card"><h3 style="margin-top:0">Case 2 – V2 only (V1 shorted)</h3><div id="c2"></div><div id="t2"></div></div>
+</div>
+<div class="card" id="bars"></div>
+<div class="card sum" id="sum" aria-live="polite"></div>
+</section>
+
+<section id="learning">
+<h2>Learning Mode</h2>
+<p class="mute">Open each step in order, then use the formula sheet below.</p>
+<details><summary>Step 1 – Check the network is linear</summary><p>Superposition works only for linear circuits: resistors, independent sources and linear dependent sources. It does not work for power, because power depends on the square of current.</p></details>
+<details><summary>Step 2 – Pick one source and turn off the rest</summary><p>An ideal voltage source has zero voltage when turned off, so replace it with a wire. An ideal current source carries zero current when turned off, so replace it with a break.</p></details>
+<details><summary>Step 3 – Solve the simpler circuit</summary><p>With V2 shorted, R2 and RL are in parallel, and that pair is in series with R1. Use the voltage divider to find VA, then IL′ = VA / RL.</p></details>
+<details><summary>Step 4 – Repeat for every other source</summary><p>Do the same with V1 shorted: now R1 and RL are in parallel, in series with R2. This gives IL″.</p></details>
+<details><summary>Step 5 – Add with signs</summary><p>IL = IL′ + IL″. If a partial current flows against the direction you chose for IL, it enters the sum as a negative number.</p></details>
+
+<h2 style="margin-top:40px">Formula sheet</h2>
+<div class="grid">
+<div class="card"><h3 style="margin-top:0">Ohm’s law</h3><p class="mute">Voltage across a resistor is proportional to the current through it.</p><p class="eq">V = I × <b>R</b></p><p class="eq">I = V / <b>R</b> &nbsp; <b>R</b> = V / I</p><p class="eq">P = V × I = I² × <b>R</b> = V² / <b>R</b></p></div>
+<div class="card"><h3 style="margin-top:0">Kirchhoff’s Current Law (KCL)</h3><p class="mute">The currents entering a node equal the currents leaving it.</p><p class="eq">Σ Iin = Σ Iout (or Σ I = 0)</p><p class="eq">At node A: I1 + I2 = IL</p></div>
+<div class="card"><h3 style="margin-top:0">Kirchhoff’s Voltage Law (KVL)</h3><p class="mute">The voltages around any closed loop add up to zero.</p><p class="eq">Σ V = 0 (around a closed loop)</p><p class="eq">V1 − I1<b>R1</b> − IL<b>RL</b> = 0</p></div>
+<div class="card"><h3 style="margin-top:0">Series and parallel resistors</h3><p class="mute">Series resistors add. Parallel resistors share the same voltage.</p><p class="eq">Series: Req = <b>R1</b> + <b>R2</b></p><p class="eq">Parallel: 1/Req = 1/<b>R1</b> + 1/<b>R2</b></p><p class="eq">Two in parallel: Req = <b>R1R2</b> / (<b>R1</b> + <b>R2</b>)</p></div>
+<div class="card"><h3 style="margin-top:0">Voltage and current dividers</h3><p class="mute">Used in each superposition case to find VA and the load current.</p><p class="eq">Voltage divider: VR1 = V × <b>R1</b> / (<b>R1</b> + <b>R2</b>)</p><p class="eq">Current divider: I1 = I × <b>R2</b> / (<b>R1</b> + <b>R2</b>)</p></div>
+<div class="card"><h3 style="margin-top:0">Superposition formulas</h3><p class="mute">Used in this simulator.</p><p class="eq">IL = IL′ + IL″</p><p class="eq">VA′ = V1 × (<b>R2</b>∥<b>RL</b>) / (<b>R1</b> + <b>R2</b>∥<b>RL</b>)</p><p class="eq">Check: VA = (V1/<b>R1</b> + V2/<b>R2</b>) / (1/<b>R1</b> + 1/<b>R2</b> + 1/<b>RL</b>)</p></div>
+</div>
+</section>
+
+<section id="quiz"><h2>Practice Quiz</h2><p class="mute">Solve for the load current IL using superposition, then check your answer to 0.01 A.</p><div class="card"><p id="qtext"></p><div class="q"><input id="qa" type="number" step="any" placeholder="IL in amps"><button class="p" id="qc">Check answer</button><button id="qs">Show solution</button><button id="qn">New problem</button></div><p id="qr" aria-live="polite"></p></div></section>
+
+<footer>SuperpositionLAB – Interactive Superposition Simulator<br><b>K. Sai Prasad</b> · 26211A05P1 · CSE D</footer>
+
+<script>
+var PRESETS=[
+["Benchmark",10,5,2,4,3],["Equal sources",12,12,6,6,6],["Reversed V2",10,-5,2,4,3],
+["Heavy load",20,10,5,5,50],["Light load",9,6,10,10,1],["Unbalanced",24,6,3,12,4]];
+var $=function(id){return document.getElementById(id)};
+var ids=["v1","v2","r1","r2","rl"];
+function par(a,b){return a*b/(a+b)}
+function f(x){return (Math.round(x*1000)/1000).toString()}
+function val(id){var x=parseFloat($(id).value);return isNaN(x)?0:x}
+function solve(v1,v2,r1,r2,rl){
+  var a=par(r2,rl),va1=v1*a/(r1+a),il1=va1/rl;
+  var b=par(r1,rl),va2=v2*b/(r2+b),il2=va2/rl;
+  var va=(v1/r1+v2/r2)/(1/r1+1/r2+1/rl);
+  return{va1:va1,il1:il1,va2:va2,il2:il2,il:il1+il2,exact:va/rl,va:va};
+}
+function res(x,y,lab,col,vert){
+  var s='<g stroke="'+col+'" fill="none" stroke-width="2">';
+  s+=vert?'<path d="M'+x+' '+y+'v8l8 6-16 12 16 12-16 12 8 6v6"/>':'';
+  return s+'</g><text x="'+(x+16)+'" y="'+(y+40)+'" fill="'+col+'" font-size="13">'+lab+'</text>';
+}
+function src(x,y,lab,on){
+  if(!on)return '<path d="M'+x+' '+y+'v34" stroke="#888" stroke-width="2" stroke-dasharray="4 3"/><text x="'+(x+10)+'" y="'+(y+20)+'" fill="#888" font-size="11">short</text>';
+  return '<path d="M'+x+' '+y+'v14M'+x+' '+(y+20)+'v14" stroke="#aaa" stroke-width="2"/>'+
+  '<path d="M'+(x-13)+' '+(y+14)+'h26" stroke="#facc15" stroke-width="3"/><path d="M'+(x-7)+' '+(y+20)+'h14" stroke="#3b82f6" stroke-width="3"/>'+
+  '<text x="'+(x+18)+'" y="'+(y+22)+'" fill="#facc15" font-size="13">'+lab+'</text>';
+}
+function svg(on1,on2,p){
+  var w='stroke="#aaa" stroke-width="2" fill="none"';
+  var s='<svg viewBox="0 0 360 200" role="img" aria-label="Circuit diagram">';
+  s+='<path '+w+' d="M60 40H300M60 40v10M60 130v30M180 40v10M180 130v30M300 40v30M300 130v30M60 160H300"/>';
+  s+=res(60,50,'R1 '+p.r1+'Ω','#ef4444',1)+res(180,50,'R2 '+p.r2+'Ω','#ef4444',1);
+  s+='<g stroke="#22c55e" fill="none" stroke-width="2"><path d="M300 70v8l8 6-16 12 16 12-16 12 8 6v6"/></g><text x="316" y="105" fill="#22c55e" font-size="13" text-anchor="end" transform="translate(30 0)">RL</text>';
+  s+=src(60,90,'V1',on1)+src(180,90,'V2',on2);
+  s+='<circle cx="240" cy="40" r="4" fill="#fff"/><text x="232" y="30" fill="#fff" font-size="13">A</text>';
+  s+='<path d="M170 170h20M175 175h10M180 160v10" stroke="#aaa" stroke-width="2"/><text x="20" y="176" fill="#666" font-size="11">ground</text>';
+  return s+fl('M60 160V40H240',p.i1)+fl('M180 160V40H240',p.i2)+fl('M240 40H300V160',p.il)+'</svg>';
+}
+function render(){
+  var v1=val("v1"),v2=val("v2"),r1=Math.max(val("r1"),0.001),r2=Math.max(val("r2"),0.001),rl=Math.max(val("rl"),0.001);
+  var p={r1:f(r1),r2:f(r2)},s=solve(v1,v2,r1,r2,rl);
+  var q=function(a,b,va,il){return Object.assign({},p,{i1:(a-va)/r1,i2:(b-va)/r2,il:il})};
+  $("c0").innerHTML=svg(1,1,q(v1,v2,s.va,s.exact));$("c1").innerHTML=svg(1,0,q(v1,0,s.va1,s.il1));$("c2").innerHTML=svg(0,1,q(0,v2,s.va2,s.il2));
+  $("t0").innerHTML='<p class="res">VA = '+f(s.va)+' V<br>IL = '+f(s.exact)+' A (nodal analysis)</p>';
+  $("t1").innerHTML='<p class="mute">R2 ∥ RL = '+f(par(r2,rl))+' Ω</p><p class="res">VA′ = '+f(s.va1)+' V<br>IL′ = '+f(s.il1)+' A</p>';
+  $("t2").innerHTML='<p class="mute">R1 ∥ RL = '+f(par(r1,rl))+' Ω</p><p class="res">VA″ = '+f(s.va2)+' V<br>IL″ = '+f(s.il2)+' A</p>';
+  var ok=Math.abs(s.il-s.exact)<1e-9;
+  $("sum").innerHTML='<h3 style="margin-top:0">Add with signs</h3><p class="res">IL = IL′ + IL″ = '+f(s.il1)+' + '+f(s.il2)+' = '+f(s.il)+' A</p><p>Exact nodal check: '+f(s.exact)+' A – '+(ok?'the two answers match.':'mismatch.')+'</p><p class="mute">Load power P = IL² × RL = '+f(s.il*s.il*rl)+' W. Note this is not the sum of the partial powers.</p>';
+  bars(s);
+}
+var LAST,RS={};
+function fl(d,i){var a=Math.abs(i||0);if(a<0.001)return '';return '<path class="flow'+(i<0?' r':'')+'" style="animation-duration:'+Math.max(.35,Math.min(3,2/a)).toFixed(2)+'s" d="'+d+'"/>'}
+function bars(s){LAST=s;var m=Math.max(Math.abs(s.il1),Math.abs(s.il2),Math.abs(s.il),1e-9);
+  var r=[['IL′',s.il1,'var(--yel)'],['IL″',s.il2,'var(--blue)'],['IL',s.il,'var(--green)']];
+  $('bars').innerHTML='<h3 style="margin-top:0">Contribution of each source</h3>'+r.map(function(x){return '<div class="bar"><span>'+x[0]+'</span><i style="width:'+(Math.abs(x[1])/m*100)+'%;background:'+x[2]+'"></i><em>'+f(x[1])+' A</em></div>'}).join('');
+  ids.forEach(function(id){RS[id].value=$(id).value})}
+ids.forEach(function(id){
+  var r=document.createElement('input');r.type='range';r.setAttribute('aria-label',id+' slider');
+  var v=id[0]=='v';r.min=v?-20:0.5;r.max=v?20:(id=='rl'?50:20);r.step=0.5;RS[id]=r;
+  r.oninput=function(){$(id).value=r.value;render()};
+  $(id).parentNode.appendChild(r);$(id).addEventListener('input',render)});
+$('play').onclick=function(){
+  var els=[].slice.call(document.querySelectorAll('.circuits .card')).concat($('bars'),$('sum'));
+  var msg=['Step 1: the original circuit, both sources active.','Step 2: keep V1 and short V2, then solve.','Step 3: keep V2 and short V1, then solve.','Step 4: add the partial currents with signs.'];
+  els.forEach(function(e){e.classList.add('hide')});
+  msg.forEach(function(t,k){setTimeout(function(){
+    if(k<3)els[k].classList.remove('hide');else{els[3].classList.remove('hide');els[4].classList.remove('hide')}
+    $('status').textContent=t;if(k==3)setTimeout(function(){$('status').textContent=''},3000)},k*1600)})};
+$('rnd').onclick=function(){var r=function(a,b){return a+Math.floor(Math.random()*(b-a+1))};
+  $('v1').value=r(2,20);$('v2').value=r(-10,15);$('r1').value=r(1,12);$('r2').value=r(1,12);$('rl').value=r(1,15);render()};
+$('rst').onclick=function(){ids.forEach(function(id,k){$(id).value=PRESETS[0][k+1]});render()};
+$('flw').onclick=function(){var o=document.body.classList.toggle('noflow');this.textContent=o?'Show current flow':'Hide current flow'};
+$('cpy').onclick=function(){var b=this,s=LAST,t='V1='+val('v1')+' V, V2='+val('v2')+' V, R1='+val('r1')+', R2='+val('r2')+', RL='+val('rl')+' ohm\nIL′='+f(s.il1)+' A, IL″='+f(s.il2)+' A, IL='+f(s.il)+' A';
+  try{navigator.clipboard.writeText(t).then(function(){b.textContent='Copied'},function(){b.textContent='Copy blocked'})}catch(e){b.textContent='Copy blocked'}
+  setTimeout(function(){b.textContent='Copy results'},1800)};
+var QP;function newQ(){var r=function(a,b){return a+Math.floor(Math.random()*(b-a+1))};
+  QP=[r(2,24),r(-12,12),r(1,10),r(1,10),r(1,10)];
+  $('qtext').textContent='V1 = '+QP[0]+' V, V2 = '+QP[1]+' V, R1 = '+QP[2]+' Ω, R2 = '+QP[3]+' Ω, RL = '+QP[4]+' Ω. Find IL.';$('qr').textContent='';$('qa').value=''}
+$('qc').onclick=function(){var s=solve.apply(null,QP),a=parseFloat($('qa').value);
+  $('qr').innerHTML=isNaN(a)?'Enter a number first.':Math.abs(a-s.exact)<0.01?'<span class="ok">Correct – IL = '+f(s.exact)+' A.</span>':'<span class="bad">Not quite. Check your signs and the parallel pair.</span>'};
+$('qs').onclick=function(){var s=solve.apply(null,QP);$('qr').textContent='IL′ = '+f(s.il1)+' A, IL″ = '+f(s.il2)+' A, so IL = '+f(s.il)+' A.'};
+$('qn').onclick=newQ;newQ();
+var obs=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting)document.querySelectorAll('nav a').forEach(function(a){a.classList.toggle('on',a.getAttribute('href')=='#'+x.target.id)})})},{rootMargin:'-45% 0px -50% 0px'});
+document.querySelectorAll('section').forEach(function(s){obs.observe(s)});
+PRESETS.forEach(function(q){
+  var b=document.createElement("button");b.textContent=q[0];
+  b.onclick=function(){ids.forEach(function(id,k){$(id).value=q[k+1]});render();$("sim").scrollIntoView()};
+  $("presets").appendChild(b);
+});
+render();
+</script>
+</body>
+</html>

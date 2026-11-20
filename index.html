@@ -82,7 +82,7 @@ input[type=range]{padding:0;accent-color:var(--yel)}
 <h1>Interactive Superposition Theorem Simulator</h1>
 <p>Enter your source and resistor values, then watch the circuit split into one-source-at-a-time circuits and add back up to the real answer.</p>
 <a class="btn" href="#sim">Launch Superposition Simulator</a>
-<div class="tags"><span>Exact nodal-analysis cross-check</span><span>6 ready circuit presets</span><span>Reference problem: IL = 1.923 A verified</span></div>
+<div class="tags"><span>Exact nodal-analysis cross-check</span><span>6 ready circuit presets</span><span>Reference problem: I = 1.923 A verified</span></div>
 </section>
 
 <section id="superposition">
@@ -92,7 +92,7 @@ input[type=range]{padding:0;accent-color:var(--yel)}
 <ul>
 <li>Keep one source, replace each other voltage source with a short circuit</li>
 <li>Replace each other current source with an open circuit</li>
-<li>Add the partial currents with their signs: IL = IL′ + IL″</li>
+<li>Add the partial currents with their signs: I = I′ + I″</li>
 </ul>
 <div class="grid">
 <div class="card">
@@ -107,7 +107,7 @@ input[type=range]{padding:0;accent-color:var(--yel)}
 <div class="card">
 <h3 style="margin-top:0">Verified benchmark</h3>
 <p>V1 = 10 V and V2 = 5 V feed node A through R1 = 2 Ω and R2 = 4 Ω. The load RL = 3 Ω sits from A to ground.</p>
-<p class="res">IL′ = 1.538 A<br>IL″ = 0.385 A<br>IL = 1.923 A (exact)</p>
+<p class="res">I′ = 1.538 A<br>I″ = 0.385 A<br>I = 1.923 A (exact)</p>
 </div>
 </div>
 <h3>Six ready circuit presets</h3>
@@ -142,22 +142,22 @@ input[type=range]{padding:0;accent-color:var(--yel)}
 <p class="mute">Open each step in order, then use the formula sheet below.</p>
 <details><summary>Step 1 – Check the network is linear</summary><p>Superposition works only for linear circuits: resistors, independent sources and linear dependent sources. It does not work for power, because power depends on the square of current.</p></details>
 <details><summary>Step 2 – Pick one source and turn off the rest</summary><p>An ideal voltage source has zero voltage when turned off, so replace it with a wire. An ideal current source carries zero current when turned off, so replace it with a break.</p></details>
-<details><summary>Step 3 – Solve the simpler circuit</summary><p>With V2 shorted, R2 and RL are in parallel, and that pair is in series with R1. Use the voltage divider to find VA, then IL′ = VA / RL.</p></details>
-<details><summary>Step 4 – Repeat for every other source</summary><p>Do the same with V1 shorted: now R1 and RL are in parallel, in series with R2. This gives IL″.</p></details>
-<details><summary>Step 5 – Add with signs</summary><p>IL = IL′ + IL″. If a partial current flows against the direction you chose for IL, it enters the sum as a negative number.</p></details>
+<details><summary>Step 3 – Solve the simpler circuit</summary><p>With V2 shorted, R2 and RL are in parallel, and that pair is in series with R1. Find the total resistance, get the current from V1, then use the current divider to find the load current I′.</p></details>
+<details><summary>Step 4 – Repeat for every other source</summary><p>Do the same with V1 shorted: now R1 and RL are in parallel, in series with R2. This gives I″.</p></details>
+<details><summary>Step 5 – Add with signs</summary><p>I = I′ + I″. If a partial current flows against the direction you chose for I, it enters the sum as a negative number.</p></details>
 
 <h2 style="margin-top:40px">Formula sheet</h2>
 <div class="grid">
 <div class="card"><h3 style="margin-top:0">Ohm’s law</h3><p class="mute">Voltage across a resistor is proportional to the current through it.</p><p class="eq">V = I × <b>R</b></p><p class="eq">I = V / <b>R</b> &nbsp; <b>R</b> = V / I</p><p class="eq">P = V × I = I² × <b>R</b> = V² / <b>R</b></p></div>
-<div class="card"><h3 style="margin-top:0">Kirchhoff’s Current Law (KCL)</h3><p class="mute">The currents entering a node equal the currents leaving it.</p><p class="eq">Σ Iin = Σ Iout (or Σ I = 0)</p><p class="eq">At node A: I1 + I2 = IL</p></div>
-<div class="card"><h3 style="margin-top:0">Kirchhoff’s Voltage Law (KVL)</h3><p class="mute">The voltages around any closed loop add up to zero.</p><p class="eq">Σ V = 0 (around a closed loop)</p><p class="eq">V1 − I1<b>R1</b> − IL<b>RL</b> = 0</p></div>
+<div class="card"><h3 style="margin-top:0">Kirchhoff’s Current Law (KCL)</h3><p class="mute">The currents entering a node equal the currents leaving it.</p><p class="eq">Σ Iin = Σ Iout (or Σ I = 0)</p><p class="eq">At node A: I1 + I2 = I</p></div>
+<div class="card"><h3 style="margin-top:0">Kirchhoff’s Voltage Law (KVL)</h3><p class="mute">The voltages around any closed loop add up to zero.</p><p class="eq">Σ V = 0 (around a closed loop)</p><p class="eq">V1 − I1<b>R1</b> − I<b>RL</b> = 0</p></div>
 <div class="card"><h3 style="margin-top:0">Series and parallel resistors</h3><p class="mute">Series resistors add. Parallel resistors share the same voltage.</p><p class="eq">Series: Req = <b>R1</b> + <b>R2</b></p><p class="eq">Parallel: 1/Req = 1/<b>R1</b> + 1/<b>R2</b></p><p class="eq">Two in parallel: Req = <b>R1R2</b> / (<b>R1</b> + <b>R2</b>)</p></div>
-<div class="card"><h3 style="margin-top:0">Voltage and current dividers</h3><p class="mute">Used in each superposition case to find VA and the load current.</p><p class="eq">Voltage divider: VR1 = V × <b>R1</b> / (<b>R1</b> + <b>R2</b>)</p><p class="eq">Current divider: I1 = I × <b>R2</b> / (<b>R1</b> + <b>R2</b>)</p></div>
-<div class="card"><h3 style="margin-top:0">Superposition formulas</h3><p class="mute">Used in this simulator.</p><p class="eq">IL = IL′ + IL″</p><p class="eq">VA′ = V1 × (<b>R2</b>∥<b>RL</b>) / (<b>R1</b> + <b>R2</b>∥<b>RL</b>)</p><p class="eq">Check: VA = (V1/<b>R1</b> + V2/<b>R2</b>) / (1/<b>R1</b> + 1/<b>R2</b> + 1/<b>RL</b>)</p></div>
+<div class="card"><h3 style="margin-top:0">Voltage and current dividers</h3><p class="mute">Used in each superposition case to find the load current.</p><p class="eq">Voltage divider: VR1 = V × <b>R1</b> / (<b>R1</b> + <b>R2</b>)</p><p class="eq">Current divider: I1 = I × <b>R2</b> / (<b>R1</b> + <b>R2</b>)</p></div>
+<div class="card"><h3 style="margin-top:0">Superposition formulas</h3><p class="mute">Used in this simulator.</p><p class="eq">I = I′ + I″</p><p class="eq">I′ = V1 / (<b>R1</b> + <b>R2</b>∥<b>RL</b>) × <b>R2</b> / (<b>R2</b> + <b>RL</b>)</p><p class="eq">I″ = V2 / (<b>R2</b> + <b>R1</b>∥<b>RL</b>) × <b>R1</b> / (<b>R1</b> + <b>RL</b>)</p></div>
 </div>
 </section>
 
-<section id="quiz"><h2>Practice Quiz</h2><p class="mute">Solve for the load current IL using superposition, then check your answer to 0.01 A.</p><div class="card"><p id="qtext"></p><div class="q"><input id="qa" type="number" step="any" placeholder="IL in amps"><button class="p" id="qc">Check answer</button><button id="qs">Show solution</button><button id="qn">New problem</button></div><p id="qr" aria-live="polite"></p></div></section>
+<section id="quiz"><h2>Practice Quiz</h2><p class="mute">Solve for the load current I using superposition, then check your answer to 0.01 A.</p><div class="card"><p id="qtext"></p><div class="q"><input id="qa" type="number" step="any" placeholder="I in amps"><button class="p" id="qc">Check answer</button><button id="qs">Show solution</button><button id="qn">New problem</button></div><p id="qr" aria-live="polite"></p></div></section>
 
 <footer>SuperpositionLAB – Interactive Superposition Simulator<br><b>K. Sai Prasad</b> · 26211A05P1 · CSE D</footer>
 
@@ -193,27 +193,27 @@ function svg(on1,on2,p){
   s+='<path '+w+' d="M60 40H300M60 40v10M60 130v30M180 40v10M180 130v30M300 40v30M300 130v30M60 160H300"/>';
   s+=res(60,50,'R1 '+p.r1+'Ω','#ef4444',1)+res(180,50,'R2 '+p.r2+'Ω','#ef4444',1);
   s+='<g stroke="#22c55e" fill="none" stroke-width="2"><path d="M300 70v8l8 6-16 12 16 12-16 12 8 6v6"/></g><text x="316" y="105" fill="#22c55e" font-size="13" text-anchor="end" transform="translate(30 0)">RL</text>';
-  s+=src(60,90,'V1',on1)+src(180,90,'V2',on2);
+  s+=src(60,90,p.v1+' V',on1)+src(180,90,p.v2+' V',on2);
   s+='<circle cx="240" cy="40" r="4" fill="#fff"/><text x="232" y="30" fill="#fff" font-size="13">A</text>';
   s+='<path d="M170 170h20M175 175h10M180 160v10" stroke="#aaa" stroke-width="2"/><text x="20" y="176" fill="#666" font-size="11">ground</text>';
   return s+fl('M60 160V40H240',p.i1)+fl('M180 160V40H240',p.i2)+fl('M240 40H300V160',p.il)+'</svg>';
 }
 function render(){
   var v1=val("v1"),v2=val("v2"),r1=Math.max(val("r1"),0.001),r2=Math.max(val("r2"),0.001),rl=Math.max(val("rl"),0.001);
-  var p={r1:f(r1),r2:f(r2)},s=solve(v1,v2,r1,r2,rl);
+  var p={r1:f(r1),r2:f(r2),v1:f(v1),v2:f(v2)},s=solve(v1,v2,r1,r2,rl);
   var q=function(a,b,va,il){return Object.assign({},p,{i1:(a-va)/r1,i2:(b-va)/r2,il:il})};
   $("c0").innerHTML=svg(1,1,q(v1,v2,s.va,s.exact));$("c1").innerHTML=svg(1,0,q(v1,0,s.va1,s.il1));$("c2").innerHTML=svg(0,1,q(0,v2,s.va2,s.il2));
-  $("t0").innerHTML='<p class="res">VA = '+f(s.va)+' V<br>IL = '+f(s.exact)+' A (nodal analysis)</p>';
-  $("t1").innerHTML='<p class="mute">R2 ∥ RL = '+f(par(r2,rl))+' Ω</p><p class="res">VA′ = '+f(s.va1)+' V<br>IL′ = '+f(s.il1)+' A</p>';
-  $("t2").innerHTML='<p class="mute">R1 ∥ RL = '+f(par(r1,rl))+' Ω</p><p class="res">VA″ = '+f(s.va2)+' V<br>IL″ = '+f(s.il2)+' A</p>';
+  $("t0").innerHTML='<p class="res">I = '+f(s.exact)+' A (nodal analysis)</p>';
+  $("t1").innerHTML='<p class="mute">R2 ∥ RL = '+f(par(r2,rl))+' Ω</p><p class="res">I′ = '+f(s.il1)+' A</p>';
+  $("t2").innerHTML='<p class="mute">R1 ∥ RL = '+f(par(r1,rl))+' Ω</p><p class="res">I″ = '+f(s.il2)+' A</p>';
   var ok=Math.abs(s.il-s.exact)<1e-9;
-  $("sum").innerHTML='<h3 style="margin-top:0">Add with signs</h3><p class="res">IL = IL′ + IL″ = '+f(s.il1)+' + '+f(s.il2)+' = '+f(s.il)+' A</p><p>Exact nodal check: '+f(s.exact)+' A – '+(ok?'the two answers match.':'mismatch.')+'</p><p class="mute">Load power P = IL² × RL = '+f(s.il*s.il*rl)+' W. Note this is not the sum of the partial powers.</p>';
+  $("sum").innerHTML='<h3 style="margin-top:0">Add with signs</h3><p class="res">I = I′ + I″ = '+f(s.il1)+' + '+f(s.il2)+' = '+f(s.il)+' A</p><p>Exact nodal check: '+f(s.exact)+' A – '+(ok?'the two answers match.':'mismatch.')+'</p><p class="mute">Load power P = I² × RL = '+f(s.il*s.il*rl)+' W. Note this is not the sum of the partial powers.</p>';
   bars(s);
 }
 var LAST,RS={};
 function fl(d,i){var a=Math.abs(i||0);if(a<0.001)return '';return '<path class="flow'+(i<0?' r':'')+'" style="animation-duration:'+Math.max(.35,Math.min(3,2/a)).toFixed(2)+'s" d="'+d+'"/>'}
 function bars(s){LAST=s;var m=Math.max(Math.abs(s.il1),Math.abs(s.il2),Math.abs(s.il),1e-9);
-  var r=[['IL′',s.il1,'var(--yel)'],['IL″',s.il2,'var(--blue)'],['IL',s.il,'var(--green)']];
+  var r=[['I′',s.il1,'var(--yel)'],['I″',s.il2,'var(--blue)'],['I',s.il,'var(--green)']];
   $('bars').innerHTML='<h3 style="margin-top:0">Contribution of each source</h3>'+r.map(function(x){return '<div class="bar"><span>'+x[0]+'</span><i style="width:'+(Math.abs(x[1])/m*100)+'%;background:'+x[2]+'"></i><em>'+f(x[1])+' A</em></div>'}).join('');
   ids.forEach(function(id){RS[id].value=$(id).value})}
 ids.forEach(function(id){
@@ -232,15 +232,15 @@ $('rnd').onclick=function(){var r=function(a,b){return a+Math.floor(Math.random(
   $('v1').value=r(2,20);$('v2').value=r(-10,15);$('r1').value=r(1,12);$('r2').value=r(1,12);$('rl').value=r(1,15);render()};
 $('rst').onclick=function(){ids.forEach(function(id,k){$(id).value=PRESETS[0][k+1]});render()};
 $('flw').onclick=function(){var o=document.body.classList.toggle('noflow');this.textContent=o?'Show current flow':'Hide current flow'};
-$('cpy').onclick=function(){var b=this,s=LAST,t='V1='+val('v1')+' V, V2='+val('v2')+' V, R1='+val('r1')+', R2='+val('r2')+', RL='+val('rl')+' ohm\nIL′='+f(s.il1)+' A, IL″='+f(s.il2)+' A, IL='+f(s.il)+' A';
+$('cpy').onclick=function(){var b=this,s=LAST,t='V1='+val('v1')+' V, V2='+val('v2')+' V, R1='+val('r1')+', R2='+val('r2')+', RL='+val('rl')+' ohm\nI′='+f(s.il1)+' A, I″='+f(s.il2)+' A, I='+f(s.il)+' A';
   try{navigator.clipboard.writeText(t).then(function(){b.textContent='Copied'},function(){b.textContent='Copy blocked'})}catch(e){b.textContent='Copy blocked'}
   setTimeout(function(){b.textContent='Copy results'},1800)};
 var QP;function newQ(){var r=function(a,b){return a+Math.floor(Math.random()*(b-a+1))};
   QP=[r(2,24),r(-12,12),r(1,10),r(1,10),r(1,10)];
-  $('qtext').textContent='V1 = '+QP[0]+' V, V2 = '+QP[1]+' V, R1 = '+QP[2]+' Ω, R2 = '+QP[3]+' Ω, RL = '+QP[4]+' Ω. Find IL.';$('qr').textContent='';$('qa').value=''}
+  $('qtext').textContent='V1 = '+QP[0]+' V, V2 = '+QP[1]+' V, R1 = '+QP[2]+' Ω, R2 = '+QP[3]+' Ω, RL = '+QP[4]+' Ω. Find I.';$('qr').textContent='';$('qa').value=''}
 $('qc').onclick=function(){var s=solve.apply(null,QP),a=parseFloat($('qa').value);
-  $('qr').innerHTML=isNaN(a)?'Enter a number first.':Math.abs(a-s.exact)<0.01?'<span class="ok">Correct – IL = '+f(s.exact)+' A.</span>':'<span class="bad">Not quite. Check your signs and the parallel pair.</span>'};
-$('qs').onclick=function(){var s=solve.apply(null,QP);$('qr').textContent='IL′ = '+f(s.il1)+' A, IL″ = '+f(s.il2)+' A, so IL = '+f(s.il)+' A.'};
+  $('qr').innerHTML=isNaN(a)?'Enter a number first.':Math.abs(a-s.exact)<0.01?'<span class="ok">Correct – I = '+f(s.exact)+' A.</span>':'<span class="bad">Not quite. Check your signs and the parallel pair.</span>'};
+$('qs').onclick=function(){var s=solve.apply(null,QP);$('qr').textContent='I′ = '+f(s.il1)+' A, I″ = '+f(s.il2)+' A, so I = '+f(s.il)+' A.'};
 $('qn').onclick=newQ;newQ();
 var obs=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting)document.querySelectorAll('nav a').forEach(function(a){a.classList.toggle('on',a.getAttribute('href')=='#'+x.target.id)})})},{rootMargin:'-45% 0px -50% 0px'});
 document.querySelectorAll('section').forEach(function(s){obs.observe(s)});
@@ -253,3 +253,4 @@ render();
 </script>
 </body>
 </html>
+
